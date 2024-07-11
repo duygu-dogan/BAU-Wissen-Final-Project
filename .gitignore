@@ -397,3 +397,5 @@ FodyWeavers.xsd
 # JetBrains Rider
 *.sln.iml
 *.json
+RentVilla.UI/RentVilla.MVC/appsettings.json
+RentVillaAPI/Presentation/RentVilla.API/appsettings.json
