@@ -1,7 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using RentVilla.Application.Abstraction.Services;
 using RentVilla.Application.Repositories.AttributeRepo;
 using RentVilla.Application.Repositories.EndpointRepo;

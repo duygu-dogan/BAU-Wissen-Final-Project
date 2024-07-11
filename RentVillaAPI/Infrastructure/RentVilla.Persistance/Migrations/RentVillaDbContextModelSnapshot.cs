@@ -203,9 +203,6 @@ namespace RentVilla.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<Guid?>("AttributeTypeId")
-                        .HasColumnType("uuid");
-
                     b.Property<Guid?>("AttributesId")
                         .HasColumnType("uuid");
 
@@ -219,8 +216,6 @@ namespace RentVilla.Persistence.Migrations
                         .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("AttributeTypeId");
 
                     b.HasIndex("AttributesId");
 
@@ -624,22 +619,13 @@ namespace RentVilla.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("CityId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("CountryId")
-                        .HasColumnType("uuid");
-
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("DistrictId")
+                    b.Property<Guid?>("DistrictId")
                         .HasColumnType("uuid");
 
                     b.Property<Guid>("ProductId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("StateId")
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("UpdatedAt")
@@ -647,16 +633,10 @@ namespace RentVilla.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CityId");
-
-                    b.HasIndex("CountryId");
-
                     b.HasIndex("DistrictId");
 
                     b.HasIndex("ProductId")
                         .IsUnique();
-
-                    b.HasIndex("StateId");
 
                     b.ToTable("ProductAddresses");
                 });
@@ -695,16 +675,10 @@ namespace RentVilla.Persistence.Migrations
                     b.Property<string>("AppUserId")
                         .HasColumnType("text");
 
-                    b.Property<Guid?>("CityId")
-                        .HasColumnType("uuid");
-
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<Guid?>("DistrictId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid?>("StateId")
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("UpdatedAt")
@@ -715,11 +689,7 @@ namespace RentVilla.Persistence.Migrations
                     b.HasIndex("AppUserId")
                         .IsUnique();
 
-                    b.HasIndex("CityId");
-
                     b.HasIndex("DistrictId");
-
-                    b.HasIndex("StateId");
 
                     b.ToTable("UserAddress");
                 });
@@ -908,10 +878,6 @@ namespace RentVilla.Persistence.Migrations
 
             modelBuilder.Entity("RentVilla.Domain.Entities.Concrete.Attribute.ProductAttribute", b =>
                 {
-                    b.HasOne("RentVilla.Domain.Entities.Concrete.Attribute.AttributeType", "AttributeType")
-                        .WithMany()
-                        .HasForeignKey("AttributeTypeId");
-
                     b.HasOne("RentVilla.Domain.Entities.Concrete.Attribute.Attributes", "Attributes")
                         .WithMany()
                         .HasForeignKey("AttributesId");
@@ -919,8 +885,6 @@ namespace RentVilla.Persistence.Migrations
                     b.HasOne("RentVilla.Domain.Entities.Concrete.Product", "Product")
                         .WithMany("Attributes")
                         .HasForeignKey("ProductId");
-
-                    b.Navigation("AttributeType");
 
                     b.Navigation("Attributes");
 
@@ -988,23 +952,9 @@ namespace RentVilla.Persistence.Migrations
 
             modelBuilder.Entity("RentVilla.Domain.Entities.Concrete.Region.ProductAddress", b =>
                 {
-                    b.HasOne("RentVilla.Domain.Entities.Concrete.Region.City", "City")
-                        .WithMany()
-                        .HasForeignKey("CityId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("RentVilla.Domain.Entities.Concrete.Region.Country", "Country")
-                        .WithMany()
-                        .HasForeignKey("CountryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("RentVilla.Domain.Entities.Concrete.Region.District", "District")
                         .WithMany()
-                        .HasForeignKey("DistrictId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("DistrictId");
 
                     b.HasOne("RentVilla.Domain.Entities.Concrete.Product", "Product")
                         .WithOne("ProductAddress")
@@ -1012,21 +962,9 @@ namespace RentVilla.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("RentVilla.Domain.Entities.Concrete.Region.State", "State")
-                        .WithMany()
-                        .HasForeignKey("StateId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("City");
-
-                    b.Navigation("Country");
-
                     b.Navigation("District");
 
                     b.Navigation("Product");
-
-                    b.Navigation("State");
                 });
 
             modelBuilder.Entity("RentVilla.Domain.Entities.Concrete.Region.State", b =>
@@ -1046,25 +984,13 @@ namespace RentVilla.Persistence.Migrations
                         .WithOne("UserAddress")
                         .HasForeignKey("RentVilla.Domain.Entities.Concrete.Region.UserAddress", "AppUserId");
 
-                    b.HasOne("RentVilla.Domain.Entities.Concrete.Region.City", "City")
-                        .WithMany()
-                        .HasForeignKey("CityId");
-
                     b.HasOne("RentVilla.Domain.Entities.Concrete.Region.District", "District")
                         .WithMany()
                         .HasForeignKey("DistrictId");
 
-                    b.HasOne("RentVilla.Domain.Entities.Concrete.Region.State", "State")
-                        .WithMany()
-                        .HasForeignKey("StateId");
-
                     b.Navigation("AppUser");
 
-                    b.Navigation("City");
-
                     b.Navigation("District");
-
-                    b.Navigation("State");
                 });
 
             modelBuilder.Entity("RentVilla.Domain.Entities.Concrete.Reservation", b =>

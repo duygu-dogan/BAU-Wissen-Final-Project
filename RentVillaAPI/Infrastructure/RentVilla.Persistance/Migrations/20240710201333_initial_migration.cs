@@ -7,28 +7,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace RentVilla.Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialMigration : Migration
+    public partial class initial_migration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.CreateTable(
-                name: "AddOns",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    AdditionalServices = table.Column<int>(type: "integer", nullable: false),
-                    Price = table.Column<decimal>(type: "numeric", nullable: false),
-                    IsActive = table.Column<bool>(type: "boolean", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AddOns", x => x.Id);
-                });
-
             migrationBuilder.CreateTable(
                 name: "AspNetRoles",
                 columns: table => new
@@ -50,11 +33,12 @@ namespace RentVilla.Persistence.Migrations
                     Id = table.Column<string>(type: "text", nullable: false),
                     FirstName = table.Column<string>(type: "text", nullable: true),
                     LastName = table.Column<string>(type: "text", nullable: true),
-                    BirthDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    BirthDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     Gender = table.Column<string>(type: "text", nullable: true),
                     Address = table.Column<string>(type: "text", nullable: true),
-                    City = table.Column<string>(type: "text", nullable: true),
                     ProfileImage = table.Column<string>(type: "text", nullable: true),
+                    RefreshToken = table.Column<string>(type: "text", nullable: true),
+                    RefreshTokenEndDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
                     UserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
@@ -94,8 +78,8 @@ namespace RentVilla.Persistence.Migrations
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Name = table.Column<string>(type: "text", nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    CreatedAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -111,11 +95,25 @@ namespace RentVilla.Persistence.Migrations
                     Path = table.Column<string>(type: "text", nullable: true),
                     Storage = table.Column<string>(type: "text", nullable: true),
                     Discriminator = table.Column<string>(type: "text", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    CreatedAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Files", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Menus",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Name = table.Column<string>(type: "text", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Menus", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -132,11 +130,10 @@ namespace RentVilla.Persistence.Migrations
                     ShortestRentPeriod = table.Column<int>(type: "integer", nullable: false),
                     Properties = table.Column<string>(type: "text", nullable: true),
                     Rating = table.Column<string>(type: "text", nullable: true),
-                    Status = table.Column<int>(type: "integer", nullable: false),
                     IsActive = table.Column<bool>(type: "boolean", nullable: false),
                     IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    CreatedAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -250,24 +247,22 @@ namespace RentVilla.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Reservations",
+                name: "ReservationCarts",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    StartDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    EndDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    AdultNumber = table.Column<int>(type: "integer", nullable: false),
-                    ChildrenNumber = table.Column<int>(type: "integer", nullable: false),
-                    Note = table.Column<string>(type: "text", nullable: true),
-                    ProductPrice = table.Column<decimal>(type: "numeric", nullable: false),
-                    AddOnCost = table.Column<decimal>(type: "numeric", nullable: false),
-                    TotalCost = table.Column<decimal>(type: "numeric", nullable: false),
-                    IsPaid = table.Column<bool>(type: "boolean", nullable: false),
-                    ConversationId = table.Column<string>(type: "text", nullable: true),
-                    PaymentId = table.Column<string>(type: "text", nullable: true),
-                    PaymentMethod = table.Column<int>(type: "integer", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    UserId = table.Column<string>(type: "text", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ReservationCarts", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ReservationCarts_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -296,8 +291,8 @@ namespace RentVilla.Persistence.Migrations
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Name = table.Column<string>(type: "text", nullable: true),
                     CountryId = table.Column<Guid>(type: "uuid", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    CreatedAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -308,6 +303,29 @@ namespace RentVilla.Persistence.Migrations
                         principalTable: "Countries",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Endpoints",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    MenuId = table.Column<Guid>(type: "uuid", nullable: true),
+                    ActionType = table.Column<string>(type: "text", nullable: true),
+                    HttpType = table.Column<string>(type: "text", nullable: true),
+                    Code = table.Column<string>(type: "text", nullable: true),
+                    Definition = table.Column<string>(type: "text", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Endpoints", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Endpoints_Menus_MenuId",
+                        column: x => x.MenuId,
+                        principalTable: "Menus",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -335,49 +353,73 @@ namespace RentVilla.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "AddOnsReservation",
+                name: "Reservations",
                 columns: table => new
                 {
-                    AddonsId = table.Column<Guid>(type: "uuid", nullable: false),
-                    ReservationId = table.Column<Guid>(type: "uuid", nullable: false)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    AppUserId = table.Column<string>(type: "text", nullable: true),
+                    ProductId = table.Column<Guid>(type: "uuid", nullable: false),
+                    StartDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    EndDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    AdultNumber = table.Column<int>(type: "integer", nullable: false),
+                    ChildrenNumber = table.Column<int>(type: "integer", nullable: false),
+                    Note = table.Column<string>(type: "text", nullable: true),
+                    ProductPrice = table.Column<decimal>(type: "numeric", nullable: false),
+                    TotalCost = table.Column<decimal>(type: "numeric", nullable: false),
+                    ConversationId = table.Column<string>(type: "text", nullable: true),
+                    PaymentId = table.Column<string>(type: "text", nullable: true),
+                    PaymentType = table.Column<int>(type: "integer", nullable: false),
+                    PaymentMethod = table.Column<string>(type: "text", nullable: true),
+                    Status = table.Column<int>(type: "integer", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AddOnsReservation", x => new { x.AddonsId, x.ReservationId });
+                    table.PrimaryKey("PK_Reservations", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_AddOnsReservation_AddOns_AddonsId",
-                        column: x => x.AddonsId,
-                        principalTable: "AddOns",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        name: "FK_Reservations_AspNetUsers_AppUserId",
+                        column: x => x.AppUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_AddOnsReservation_Reservations_ReservationId",
-                        column: x => x.ReservationId,
-                        principalTable: "Reservations",
+                        name: "FK_Reservations_Products_ProductId",
+                        column: x => x.ProductId,
+                        principalTable: "Products",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "ProductReservation",
+                name: "ReservationCartItems",
                 columns: table => new
                 {
-                    ProductsId = table.Column<Guid>(type: "uuid", nullable: false),
-                    ReservationsId = table.Column<Guid>(type: "uuid", nullable: false)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    ReservationCartId = table.Column<Guid>(type: "uuid", nullable: false),
+                    ProductId = table.Column<Guid>(type: "uuid", nullable: false),
+                    StartDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    EndDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    AdultNumber = table.Column<int>(type: "integer", nullable: false),
+                    ChildrenNumber = table.Column<int>(type: "integer", nullable: false),
+                    Note = table.Column<string>(type: "text", nullable: true),
+                    ProductPrice = table.Column<decimal>(type: "numeric", nullable: false),
+                    TotalCost = table.Column<decimal>(type: "numeric", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ProductReservation", x => new { x.ProductsId, x.ReservationsId });
+                    table.PrimaryKey("PK_ReservationCartItems", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ProductReservation_Products_ProductsId",
-                        column: x => x.ProductsId,
+                        name: "FK_ReservationCartItems_Products_ProductId",
+                        column: x => x.ProductId,
                         principalTable: "Products",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ProductReservation_Reservations_ReservationsId",
-                        column: x => x.ReservationsId,
-                        principalTable: "Reservations",
+                        name: "FK_ReservationCartItems_ReservationCarts_ReservationCartId",
+                        column: x => x.ReservationCartId,
+                        principalTable: "ReservationCarts",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -387,20 +429,14 @@ namespace RentVilla.Persistence.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    AttributeTypeId = table.Column<Guid>(type: "uuid", nullable: true),
                     AttributesId = table.Column<Guid>(type: "uuid", nullable: true),
                     ProductId = table.Column<Guid>(type: "uuid", nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    CreatedAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ProductAttributes", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_ProductAttributes_AttributeTypes_AttributeTypeId",
-                        column: x => x.AttributeTypeId,
-                        principalTable: "AttributeTypes",
-                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_ProductAttributes_Attributes_AttributesId",
                         column: x => x.AttributesId,
@@ -420,8 +456,8 @@ namespace RentVilla.Persistence.Migrations
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     StateId = table.Column<Guid>(type: "uuid", nullable: false),
                     Name = table.Column<string>(type: "text", nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    CreatedAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -435,14 +471,62 @@ namespace RentVilla.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "StateStateImageFile",
+                columns: table => new
+                {
+                    StateImageFilesId = table.Column<Guid>(type: "uuid", nullable: false),
+                    StatesId = table.Column<Guid>(type: "uuid", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_StateStateImageFile", x => new { x.StateImageFilesId, x.StatesId });
+                    table.ForeignKey(
+                        name: "FK_StateStateImageFile_Files_StateImageFilesId",
+                        column: x => x.StateImageFilesId,
+                        principalTable: "Files",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_StateStateImageFile_States_StatesId",
+                        column: x => x.StatesId,
+                        principalTable: "States",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AppRoleEndpoint",
+                columns: table => new
+                {
+                    EndpointsId = table.Column<Guid>(type: "uuid", nullable: false),
+                    RolesId = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AppRoleEndpoint", x => new { x.EndpointsId, x.RolesId });
+                    table.ForeignKey(
+                        name: "FK_AppRoleEndpoint_AspNetRoles_RolesId",
+                        column: x => x.RolesId,
+                        principalTable: "AspNetRoles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_AppRoleEndpoint_Endpoints_EndpointsId",
+                        column: x => x.EndpointsId,
+                        principalTable: "Endpoints",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Districts",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Name = table.Column<string>(type: "text", nullable: true),
                     CityId = table.Column<Guid>(type: "uuid", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    CreatedAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -461,44 +545,22 @@ namespace RentVilla.Persistence.Migrations
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     ProductId = table.Column<Guid>(type: "uuid", nullable: false),
-                    CountryId = table.Column<Guid>(type: "uuid", nullable: false),
-                    StateId = table.Column<Guid>(type: "uuid", nullable: false),
-                    CityId = table.Column<Guid>(type: "uuid", nullable: false),
-                    DistrictId = table.Column<Guid>(type: "uuid", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    DistrictId = table.Column<Guid>(type: "uuid", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ProductAddresses", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ProductAddresses_Cities_CityId",
-                        column: x => x.CityId,
-                        principalTable: "Cities",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ProductAddresses_Countries_CountryId",
-                        column: x => x.CountryId,
-                        principalTable: "Countries",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
                         name: "FK_ProductAddresses_Districts_DistrictId",
                         column: x => x.DistrictId,
                         principalTable: "Districts",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_ProductAddresses_Products_ProductId",
                         column: x => x.ProductId,
                         principalTable: "Products",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ProductAddresses_States_StateId",
-                        column: x => x.StateId,
-                        principalTable: "States",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -509,12 +571,9 @@ namespace RentVilla.Persistence.Migrations
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     AppUserId = table.Column<string>(type: "text", nullable: true),
-                    CountryId = table.Column<Guid>(type: "uuid", nullable: false),
-                    StateId = table.Column<Guid>(type: "uuid", nullable: false),
-                    CityId = table.Column<Guid>(type: "uuid", nullable: false),
-                    DistrictId = table.Column<Guid>(type: "uuid", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    DistrictId = table.Column<Guid>(type: "uuid", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -525,35 +584,16 @@ namespace RentVilla.Persistence.Migrations
                         principalTable: "AspNetUsers",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_UserAddress_Cities_CityId",
-                        column: x => x.CityId,
-                        principalTable: "Cities",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_UserAddress_Countries_CountryId",
-                        column: x => x.CountryId,
-                        principalTable: "Countries",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
                         name: "FK_UserAddress_Districts_DistrictId",
                         column: x => x.DistrictId,
                         principalTable: "Districts",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_UserAddress_States_StateId",
-                        column: x => x.StateId,
-                        principalTable: "States",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_AddOnsReservation_ReservationId",
-                table: "AddOnsReservation",
-                column: "ReservationId");
+                name: "IX_AppRoleEndpoint_RolesId",
+                table: "AppRoleEndpoint",
+                column: "RolesId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -608,14 +648,9 @@ namespace RentVilla.Persistence.Migrations
                 column: "CityId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ProductAddresses_CityId",
-                table: "ProductAddresses",
-                column: "CityId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ProductAddresses_CountryId",
-                table: "ProductAddresses",
-                column: "CountryId");
+                name: "IX_Endpoints_MenuId",
+                table: "Endpoints",
+                column: "MenuId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ProductAddresses_DistrictId",
@@ -629,19 +664,9 @@ namespace RentVilla.Persistence.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_ProductAddresses_StateId",
-                table: "ProductAddresses",
-                column: "StateId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_ProductAttributes_AttributesId",
                 table: "ProductAttributes",
                 column: "AttributesId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ProductAttributes_AttributeTypeId",
-                table: "ProductAttributes",
-                column: "AttributeTypeId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ProductAttributes_ProductId",
@@ -654,14 +679,39 @@ namespace RentVilla.Persistence.Migrations
                 column: "ProductImageFilesId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ProductReservation_ReservationsId",
-                table: "ProductReservation",
-                column: "ReservationsId");
+                name: "IX_ReservationCartItems_ProductId",
+                table: "ReservationCartItems",
+                column: "ProductId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ReservationCartItems_ReservationCartId",
+                table: "ReservationCartItems",
+                column: "ReservationCartId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ReservationCarts_UserId",
+                table: "ReservationCarts",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Reservations_AppUserId",
+                table: "Reservations",
+                column: "AppUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Reservations_ProductId",
+                table: "Reservations",
+                column: "ProductId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_States_CountryId",
                 table: "States",
                 column: "CountryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_StateStateImageFile_StatesId",
+                table: "StateStateImageFile",
+                column: "StatesId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_UserAddress_AppUserId",
@@ -670,31 +720,16 @@ namespace RentVilla.Persistence.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_UserAddress_CityId",
-                table: "UserAddress",
-                column: "CityId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_UserAddress_CountryId",
-                table: "UserAddress",
-                column: "CountryId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_UserAddress_DistrictId",
                 table: "UserAddress",
                 column: "DistrictId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_UserAddress_StateId",
-                table: "UserAddress",
-                column: "StateId");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "AddOnsReservation");
+                name: "AppRoleEndpoint");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
@@ -721,13 +756,19 @@ namespace RentVilla.Persistence.Migrations
                 name: "ProductProductImageFile");
 
             migrationBuilder.DropTable(
-                name: "ProductReservation");
+                name: "ReservationCartItems");
+
+            migrationBuilder.DropTable(
+                name: "Reservations");
+
+            migrationBuilder.DropTable(
+                name: "StateStateImageFile");
 
             migrationBuilder.DropTable(
                 name: "UserAddress");
 
             migrationBuilder.DropTable(
-                name: "AddOns");
+                name: "Endpoints");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
@@ -736,16 +777,19 @@ namespace RentVilla.Persistence.Migrations
                 name: "Attributes");
 
             migrationBuilder.DropTable(
-                name: "Files");
+                name: "ReservationCarts");
 
             migrationBuilder.DropTable(
                 name: "Products");
 
             migrationBuilder.DropTable(
-                name: "Reservations");
+                name: "Files");
 
             migrationBuilder.DropTable(
                 name: "Districts");
+
+            migrationBuilder.DropTable(
+                name: "Menus");
 
             migrationBuilder.DropTable(
                 name: "AttributeTypes");

@@ -15,7 +15,7 @@ namespace RentVilla.Domain.Entities.Concrete.Identity
         public string ProfileImage { get; set; }
         public ICollection<Reservation> Reservations { get; set; }
         public ICollection<ReservationCart> Carts { get; set; }
-        public string? RefreshToken { get; set; }
+        public string RefreshToken { get; set; }
         public DateTime? RefreshTokenEndDate { get; set; }
 
     }

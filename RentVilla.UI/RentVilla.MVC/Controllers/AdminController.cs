@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace RentVilla.MVC.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    //[Authorize(Roles = "Admin")]
     //[Authorize]
     public class AdminController : Controller
     {

@@ -13,8 +13,6 @@ namespace RentVilla.Domain.Entities.Concrete.Region
     {
         public string AppUserId { get; set; }
         public AppUser AppUser { get; set; }
-        public State State { get; set; }
-        public City City { get; set; }
         public District District { get; set; }
     }
 }

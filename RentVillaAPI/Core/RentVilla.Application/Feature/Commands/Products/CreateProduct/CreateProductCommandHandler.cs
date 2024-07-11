@@ -16,13 +16,15 @@ namespace RentVilla.Application.Feature.Commands.Products.CreateProduct
         private readonly IAttributeReadRepository _attributeReadRepository;
         readonly ILogger<CreateProductCommandHandler> _logger;
         private readonly IProductHubService _hubService;
+        private readonly IDistrictReadRepository _districtReadRepository;
 
-        public CreateProductCommandHandler(IProductWriteRepository productWriteRepository, IAttributeReadRepository attributeReadRepository, ILogger<CreateProductCommandHandler> logger, IProductHubService hubService)
+        public CreateProductCommandHandler(IProductWriteRepository productWriteRepository, IAttributeReadRepository attributeReadRepository, ILogger<CreateProductCommandHandler> logger, IProductHubService hubService, IDistrictReadRepository districtReadRepository)
         {
             _productWriteRepository = productWriteRepository;
             _attributeReadRepository = attributeReadRepository;
             _logger = logger;
             _hubService = hubService;
+            _districtReadRepository = districtReadRepository;
         }
 
         public async Task<CreateProductCommandResponse> Handle(CreateProductCommandRequest request, CancellationToken cancellationToken)
@@ -33,18 +35,14 @@ namespace RentVilla.Application.Feature.Commands.Products.CreateProduct
             {
                 productAttributes.Add(new()
                 {
-                    Attributes = attribute,
-                    AttributeType = attribute.AttributeType
+                    Attributes = attribute
                 });
             }
             ProductAddress productAddress = new()
             {
-                CountryId = Guid.Parse("3240f95b-7adc-4257-8dd3-c91de2b14217"),
-                StateId = Guid.Parse(request.ProductAddress.StateId),
-                CityId = Guid.Parse(request.ProductAddress.CityId),
-                DistrictId = Guid.Parse(request.ProductAddress.DistrictId)
+                District = await _districtReadRepository.GetSingleAsync(d => d.Id == Guid.Parse(request.ProductAddress.DistrictId))
             };
-            
+
             await _productWriteRepository.AddAsync(new()
             {
                 Name = request.Name,

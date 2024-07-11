@@ -15,7 +15,7 @@ namespace RentVilla.Application.DTOs.TokenDTOs
         [JsonPropertyName("expiration")]
         public DateTime Expiration { get; set; }
         [JsonPropertyName("RefreshToken")]
-        public string? RefreshToken { get; set; }
+        public string RefreshToken { get; set; }
         [JsonPropertyName("RefreshTokenEndDate")]
         public DateTime? RefreshTokenEndDate { get; set; }
     }

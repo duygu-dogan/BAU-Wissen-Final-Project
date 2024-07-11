@@ -10,7 +10,7 @@ namespace RentVilla.Application.DTOs.AuthConfigurationDTOs
     {
         public string[] RoleIds { get; set; }
         public string Code { get; set; }
-        public Type? Type { get; set; }
+        public Type Type { get; set; }
         public string Menu { get; set; }
     }
 }

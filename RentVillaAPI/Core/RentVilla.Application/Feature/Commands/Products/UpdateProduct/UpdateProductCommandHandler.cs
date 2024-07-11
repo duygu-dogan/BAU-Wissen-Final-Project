@@ -36,11 +36,8 @@ namespace RentVilla.Application.Feature.Commands.Products.UpdateProduct
             try
             {
                 Product product = await _productReadRepository.GetByIdAsync(request.Product.Id);
-                ProductAddress productAddress = new ProductAddress();
-                productAddress = _productAddressReadRepository.AppDbContext.Where(pa => pa.ProductId == product.Id).FirstOrDefault();
-                productAddress.StateId = Guid.Parse(request.Product.ProductAddress.StateId);
-                productAddress.CityId = Guid.Parse(request.Product.ProductAddress.CityId);
-                productAddress.DistrictId = Guid.Parse(request.Product.ProductAddress.DistrictId);
+                ProductAddress productAddress = _productAddressReadRepository.AppDbContext.Where(pa => pa.ProductId == product.Id).FirstOrDefault();
+                productAddress.District.Id = Guid.Parse(request.Product.ProductAddress.DistrictId);
                 await _productAddressWriteRepository.SaveAsync();
 
                 List<ProductAttribute> productAttributes = new();
@@ -51,8 +48,7 @@ namespace RentVilla.Application.Feature.Commands.Products.UpdateProduct
                     {
                         Id = Guid.NewGuid(),
                         Attributes = attribute,
-                        Product = product,
-                        AttributeType = attribute.AttributeType,
+                        Product = product
                     };
                     productAttributes.Add(newAttribute);
                 }

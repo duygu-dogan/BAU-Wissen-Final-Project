@@ -65,12 +65,12 @@ namespace RentVilla.API.Controllers
             var response = await _mediator.Send(request);
             return Ok(response.Products);
         }
-        [HttpPost]
-        public async Task<IActionResult> FilterProducts([FromBody]GetFilteredProductsQueryRequest request)
-        {
-            var response = await _mediator.Send(request);
-            return Ok(response.FilteredProducts);
-        }
+        //[HttpPost]
+        //public async Task<IActionResult> FilterProducts([FromBody]GetFilteredProductsQueryRequest request)
+        //{
+        //    var response = await _mediator.Send(request);
+        //    return Ok(response.FilteredProducts);
+        //}
 
         [HttpPost]
         [Authorize(AuthenticationSchemes = "Admin")]

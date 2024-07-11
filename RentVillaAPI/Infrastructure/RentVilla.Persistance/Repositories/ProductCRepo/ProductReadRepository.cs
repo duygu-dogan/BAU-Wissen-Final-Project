@@ -39,8 +39,7 @@ namespace RentVilla.Persistence.Repositories.ProductCRepo
                     .Select(pa => new ProductAttributeDTO
                     {
                         Id = pa.Id.ToString(),
-                        Attribute = pa.Attributes.Description,
-                        AttributeType = pa.AttributeType.Name
+                        Attribute = pa.Attributes.Description
                     }).ToList(),
                     ProductImages = _context.ProductImageFiles
                     .Where(pif => pif.Product.Any(p => p.Id == product.Id))
@@ -54,9 +53,6 @@ namespace RentVilla.Persistence.Repositories.ProductCRepo
                     .Where(pa => pa.ProductId == product.Id)
                     .Select(pa => new ProductAddressDTO
                     {
-                        CountryName = pa.Country.Name,
-                        StateName = pa.State.Name,
-                        CityName = pa.City.Name,
                         DistrictName = pa.District.Name
                     }).FirstOrDefault()
                 }).ToList();
@@ -72,8 +68,8 @@ namespace RentVilla.Persistence.Repositories.ProductCRepo
         public async Task<ProductDTO> GetJoinedProductByIdAsync(string id)
         {
             var product = await _context.Products.FindAsync(Guid.Parse(id));
-            var productAddress = _context.ProductAddresses.Where(x => x.ProductId == product.Id).Include(x => x.City).Include(x => x.State).Include(x=> x.District).Include(x => x.Country).FirstOrDefault();
-            var productAttributes = _context.ProductAttributes.Where(x => x.Product.Id == product.Id).Include(x => x.Attributes).Include(x => x.AttributeType).ToList();
+            var productAddress = _context.ProductAddresses.Where(x => x.ProductId == product.Id).Include(p => p.District.Id == product.ProductAddress.District.Id).FirstOrDefault();
+            var productAttributes = _context.ProductAttributes.Where(x => x.Product.Id == product.Id).Include(x => x.Attributes).ToList();
             var productImages = _context.ProductImageFiles.Where(x => x.Product.Any(p => p.Id == product.Id)).Include(x => x.Product).ToList();
             List<ProductImageDTO> productImageDTOs = new();
             foreach (var item in productImages)
@@ -92,8 +88,7 @@ namespace RentVilla.Persistence.Repositories.ProductCRepo
                 productAttributesDTOs.Add(new ProductAttributeDTO
                 {
                     Id = productAttibutes.Id.ToString(),
-                    Attribute = productAttibutes.Attributes.Description,
-                    AttributeType = productAttibutes.AttributeType.Name
+                    Attribute = productAttibutes.Attributes.Description
                 });
             }
             var productDTO = new ProductDTO
@@ -113,20 +108,19 @@ namespace RentVilla.Persistence.Repositories.ProductCRepo
                 IsDeleted = product.IsDeleted,
                 ProductAddress = new ProductAddressDTO
                 {
-                    CountryName = productAddress.Country.Name,
-                    CountryId = productAddress.CountryId.ToString(),
-                    StateName = productAddress.State.Name,
-                    StateId = productAddress.StateId.ToString(),
-                    CityName = productAddress.City.Name,
-                    CityId = productAddress.CityId.ToString(),
                     DistrictName = productAddress.District.Name,
-                    DistrictId = productAddress.DistrictId.ToString()
+                    DistrictId = productAddress.District.Id.ToString()
                     
                 },
                 Attributes = productAttributesDTOs,
                 ProductImages = productImageDTOs
             };
             return productDTO;
+        }
+
+        public Task<IEnumerable<ProductDTO>> GetProductsByFilter(ProductFilterDTO filters)
+        {
+            throw new NotImplementedException();
         }
 
         public Task<IEnumerable<Product>> GetProductsByPriceRange(decimal minPrice, decimal maxPrice)
@@ -138,7 +132,7 @@ namespace RentVilla.Persistence.Repositories.ProductCRepo
         {
             try
             {
-                List<Product> products = _context.Products.Where(x => x.ProductAddress.StateId.ToString() == regionId).ToList();
+                List<Product> products = _context.Products.Where(x => x.ProductAddress.District.City.StateId.ToString() == regionId).ToList();
                 List<ProductDTO> productDTOs = new();
                 foreach (var product in products)
                 {
@@ -161,8 +155,7 @@ namespace RentVilla.Persistence.Repositories.ProductCRepo
                         .Select(pa => new ProductAttributeDTO
                         {
                             Id = pa.Id.ToString(),
-                            Attribute = pa.Attributes.Description,
-                            AttributeType = pa.AttributeType.Name
+                            Attribute = pa.Attributes.Description
                         }).ToList(),
                         ProductImages = _context.ProductImageFiles
                         .Where(pif => pif.Product.Any(p => p.Id == product.Id))
@@ -176,9 +169,6 @@ namespace RentVilla.Persistence.Repositories.ProductCRepo
                         .Where(pa => pa.ProductId == product.Id)
                         .Select(pa => new ProductAddressDTO
                         {
-                            CountryName = pa.Country.Name,
-                            StateName = pa.State.Name,
-                            CityName = pa.City.Name,
                             DistrictName = pa.District.Name
                         }).FirstOrDefault()
                     });
@@ -195,71 +185,71 @@ namespace RentVilla.Persistence.Repositories.ProductCRepo
         {
             throw new NotImplementedException();
         }
-        public async Task<IEnumerable<ProductDTO>> GetProductsByFilter(ProductFilterDTO filters)
-        {
-            try
-            {
-                var products = await _context.Products
-                    .Include(p => p.Reservations.Where(r => r.StartDate <= filters.EndDate.ToUniversalTime() && r.EndDate >= filters.StartDate.ToUniversalTime()))
-                    .Include(p => p.ProductAddress)
-                    .Include(p => p.Attributes)
-                    .Include(p => p.ProductImageFiles)
-                    .Where(p => filters.SelectedStates.Contains(p.ProductAddress.StateId.ToString()) &&
-                    filters.SelectedAttributes.Select(selectedAttribute => p.Id == Guid.Parse(selectedAttribute))))
-                    .ToListAsync();
-                var availableProducts = products.Where(p => p.Reservations.Count == 0).ToList();
-                List<ProductDTO> productDTOs = new();
-                foreach (var product in availableProducts)
-                {
-                    productDTOs.Add(new ProductDTO
-                    {
-                        Id = product.Id.ToString(),
-                        Name = product.Name,
-                        Description = product.Description,
-                        Price = product.Price,
-                        Deposit = product.Deposit,
-                        MapId = product.MapId,
-                        Address = product.Address,
-                        ShortestRentPeriod = product.ShortestRentPeriod,
-                        Properties = product.Properties,
-                        Rating = product.Rating,
-                        IsActive = product.IsActive,
-                        IsDeleted = product.IsDeleted,
-                        Attributes = _context.ProductAttributes
-                        .Where(pa => pa.Product.Id == product.Id)
-                        .Select(pa => new ProductAttributeDTO
-                        {
-                            Id = pa.Id.ToString(),
-                            Attribute = pa.Attributes.Description,
-                            AttributeType = pa.AttributeType.Name
-                        }).ToList(),
-                        ProductImages = _context.ProductImageFiles
-                        .Where(pif => pif.Product.Any(p => p.Id == product.Id))
-                        .Select(image => new ProductImageDTO
-                        {
-                            FileName = image.FileName,
-                            Path = image.Path,
-                            ProductId = image.Product.Select(p => p.Id.ToString()).ToList()
-                        }).ToList(),
-                        ProductAddress = _context.ProductAddresses
-                        .Where(pa => pa.ProductId == product.Id)
-                        .Select(pa => new ProductAddressDTO
-                        {
-                            CountryName = pa.Country.Name,
-                            StateName = pa.State.Name,
-                            CityName = pa.City.Name,
-                            DistrictName = pa.District.Name
-                        }).FirstOrDefault()
-                    });
-                }
-                return productDTOs;
-            }
-            catch (Exception ex)
-            {
+        //public async Task<IEnumerable<ProductDTO>> GetProductsByFilter(ProductFilterDTO filters)
+        //{
+        //    try
+        //    {
+        //        var products = await _context.Products
+        //            .Include(p => p.Reservations.Where(r => r.StartDate <= filters.EndDate.ToUniversalTime() && r.EndDate >= filters.StartDate.ToUniversalTime()))
+        //            .Include(p => p.ProductAddress)
+        //            .Include(p => p.Attributes)
+        //            .Include(p => p.ProductImageFiles)
+        //            .Where(p => filters.SelectedStates.Contains(p.ProductAddress.StateId.ToString()) &&
+        //            filters.SelectedAttributes.Select(selectedAttribute => p.Id == Guid.Parse(selectedAttribute))))
+        //            .ToListAsync();
+        //        var availableProducts = products.Where(p => p.Reservations.Count == 0).ToList();
+        //        List<ProductDTO> productDTOs = new();
+        //        foreach (var product in availableProducts)
+        //        {
+        //            productDTOs.Add(new ProductDTO
+        //            {
+        //                Id = product.Id.ToString(),
+        //                Name = product.Name,
+        //                Description = product.Description,
+        //                Price = product.Price,
+        //                Deposit = product.Deposit,
+        //                MapId = product.MapId,
+        //                Address = product.Address,
+        //                ShortestRentPeriod = product.ShortestRentPeriod,
+        //                Properties = product.Properties,
+        //                Rating = product.Rating,
+        //                IsActive = product.IsActive,
+        //                IsDeleted = product.IsDeleted,
+        //                Attributes = _context.ProductAttributes
+        //                .Where(pa => pa.Product.Id == product.Id)
+        //                .Select(pa => new ProductAttributeDTO
+        //                {
+        //                    Id = pa.Id.ToString(),
+        //                    Attribute = pa.Attributes.Description,
+        //                    AttributeType = pa.AttributeType.Name
+        //                }).ToList(),
+        //                ProductImages = _context.ProductImageFiles
+        //                .Where(pif => pif.Product.Any(p => p.Id == product.Id))
+        //                .Select(image => new ProductImageDTO
+        //                {
+        //                    FileName = image.FileName,
+        //                    Path = image.Path,
+        //                    ProductId = image.Product.Select(p => p.Id.ToString()).ToList()
+        //                }).ToList(),
+        //                ProductAddress = _context.ProductAddresses
+        //                .Where(pa => pa.ProductId == product.Id)
+        //                .Select(pa => new ProductAddressDTO
+        //                {
+        //                    CountryName = pa.Country.Name,
+        //                    StateName = pa.State.Name,
+        //                    CityName = pa.City.Name,
+        //                    DistrictName = pa.District.Name
+        //                }).FirstOrDefault()
+        //            });
+        //        }
+        //        return productDTOs;
+        //    }
+        //    catch (Exception ex)
+        //    {
 
-                throw ex;
-            }
-        }
+        //        throw ex;
+        //    }
+        //}
 
     }
 }
