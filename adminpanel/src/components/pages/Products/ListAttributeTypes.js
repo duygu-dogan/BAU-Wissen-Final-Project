@@ -10,9 +10,11 @@ import Cookies from 'js-cookie';
 
 const ListAttributeTypes = () => {
     const [items, setItems] = useState([]);
-    const accessToken = Cookies.get('RentVilla.Cookie_AT')
-    axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
-    const fetchItems = useCallback(() => {
+    // const accessToken = Cookies.get('RentVilla.Cookie_AT')
+    // axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
+
+    // const fetchItems = useCallback(() => {
+    useEffect(() => {
         axios.get('http://localhost:5006/api/attributes/gettypes')
             .then((res) => {
                 const newItems = res.data.map(item => ({
@@ -27,11 +29,11 @@ const ListAttributeTypes = () => {
                 toast('An error occurred while fetching attributes.', { type: 'error' });
             });
     }, []);
-    useEffect(() => {
-        fetchItems();
-    }, [fetchItems]);
+    // useEffect(() => {
+    //     fetchItems();
+    // }, [fetchItems]);
     const handleModalClose = () => {
-        fetchItems();
+        // fetchItems();
         toast('Attribute type added successfully', { type: 'success' });
         setTimeout(() => {
             window.location.reload();

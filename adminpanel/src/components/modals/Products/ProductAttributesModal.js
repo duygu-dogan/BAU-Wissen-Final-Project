@@ -13,8 +13,8 @@ const ProductAttributesModal = ({ onModalClose, onAttributeChange }) => {
     const [attributes, setAttributes] = useState([]);
     const [selectedAttributes, setSelectedAttributes] = useState([]);
 
-    const accessToken = Cookies.get('RentVilla.Cookie_AT')
-    axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
+    // const accessToken = Cookies.get('RentVilla.Cookie_AT')
+    // axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
 
     useEffect(() => {
         axios.get('http://localhost:5006/api/attributes/gettypes')

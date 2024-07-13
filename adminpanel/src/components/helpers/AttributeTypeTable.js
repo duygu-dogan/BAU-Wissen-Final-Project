@@ -24,12 +24,12 @@ const AttributeTypeTable = ({ rows }) => {
         setRowsPerPage(parseInt(event.target.value, 10));
         setPage(0);
     };
-    const fetchItems = useCallback(() => {
-        window.location.reload();
-    }, []);
+    // const fetchItems = useCallback(() => {
+    //     window.location.reload();
+    // }, []);
 
     const handleModalClose = () => {
-        fetchItems();
+        // fetchItems();
         toast('Operation successful!', { type: 'success' })
     }
     return (
@@ -47,10 +47,10 @@ const AttributeTypeTable = ({ rows }) => {
                 <table className='table' aria-label="custom pagination table">
                     <thead>
                         <tr className='row justify-content-center text-center align-items-center'>
-                            <th className='col-1 '>NO</th>
-                            <th className='col-2'>TYPE</th>
-                            <th className='col-4'>ID</th>
-                            <th className='col-4'>#</th>
+                            <th className='col-2 '>NO</th>
+                            <th className='col-4'>TYPE</th>
+                            {/* <th className='col-4'>ID</th> */}
+                            <th className='col-6'>#</th>
                         </tr>
                     </thead>
 
@@ -60,11 +60,11 @@ const AttributeTypeTable = ({ rows }) => {
                             : rows
                         ).map((row, index) => (
                             <tr key={row.id} className='row justify-content-center text-center '>
-                                <th className='col-1'>{index + 1}</th>
-                                <td className='col-2'>{row.name}</td>
-                                <td className='col-4'>{row.id}</td>
-                                <td className='col-4' >
-                                    <div className='d-flex justify-content-center'>
+                                <th className='col-2'>{index + 1}</th>
+                                <td className='col-4'>{row.name}</td>
+                                {/* <td className='col-4'>{row.id}</td> */}
+                                <td className='col-6' >
+                                    <div className='d-flex justify-content-center gap-3'>
                                         <div>
                                             <a href={`/admin/attributes/${row.id}`} style={{ borderRadius: "3px" }} className='btn btn-secondary btn-sm me-2'><FontAwesomeIcon icon={faList} /></a>
                                         </div>

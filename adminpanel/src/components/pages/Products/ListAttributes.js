@@ -12,8 +12,8 @@ import Cookies from 'js-cookie';
 const ListAttributes = () => {
     const [items, setItems] = useState([]);
     const { id } = useParams();
-    const accessToken = Cookies.get('RentVilla.Cookie_AT')
-    axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
+    // const accessToken = Cookies.get('RentVilla.Cookie_AT')
+    // axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
     const fetchItems = useCallback(() => {
         axios.get(`http://localhost:5006/api/Attributes/GetTypeById?id=${id}`)
             .then((res) => {
@@ -42,7 +42,7 @@ const ListAttributes = () => {
     }
 
     return (
-        <div className='container d-flex flex-column gap-3 mt-3'>
+        <div className='rv-container d-flex flex-column gap-3 mt-3 '>
             <ToastContainer
             />
             <div className='col-md-11 d-flex mt-3 px-3 justify-content-between'>

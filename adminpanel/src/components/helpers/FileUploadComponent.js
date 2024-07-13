@@ -23,8 +23,8 @@ const FileUploadComponent = ({ fileLabel, uploadUrl, id }) => {
         setSelectedFiles(null);
         setFilePreviewUrls([]);
     }
-    const accessToken = Cookies.get('RentVilla.Cookie_AT')
-    axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
+    // const accessToken = Cookies.get('RentVilla.Cookie_AT')
+    // axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
     const handleUpload = async () => {
         console.log("upload clicked")
         if (!selectedFiles) return;

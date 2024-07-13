@@ -7,8 +7,8 @@ import Cookies from 'js-cookie';
 
 const DeleteAttributeTypeModel = ({ id, onModalClose }) => {
     const modalId = `deleteModal${id}`;
-    const accessToken = Cookies.get('RentVilla.Cookie_AT')
-    axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
+    // const accessToken = Cookies.get('RentVilla.Cookie_AT')
+    // axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
 
     const handleSoftDelete = (e) => {
         e.preventDefault();

@@ -399,3 +399,6 @@ FodyWeavers.xsd
 *.json
 RentVilla.UI/RentVilla.MVC/appsettings.json
 RentVillaAPI/Presentation/RentVilla.API/appsettings.json
+RentVillaAPI/Presentation/RentVilla.API/Properties/launchSettings.json
+RentVillaAPI/Presentation/RentVilla.API/appsettings.json
+RentVillaAPI/Presentation/RentVilla.API/appsettings.json

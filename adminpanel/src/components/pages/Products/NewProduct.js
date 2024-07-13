@@ -155,7 +155,7 @@ const NewProduct = () => {
                         id="inputDescription"
                         label="Description"
                         rows={3}
-                        text="Must be 8-20 words long."
+                        text="Must be 8-500 words long."
                     ></CFormTextarea>
                 </CCol>
                 <CCol xs={12}>

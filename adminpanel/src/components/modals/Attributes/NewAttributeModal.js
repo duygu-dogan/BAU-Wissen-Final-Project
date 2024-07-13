@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import 'react-toastify/dist/ReactToastify.css';
@@ -8,22 +8,22 @@ import Cookies from 'js-cookie';
 const NewAttributeModal = ({ attributeTypeId, onModalClose }) => {
     const [description, setDescription] = useState('');
     const [isActive, setIsActive] = useState(true);
+
     const handleDescriptionChange = (e) => {
         setDescription(e.target.value);
     }
     const handleIsActiveChange = (e) => {
         setIsActive(e.target.checked);
     }
-    const accessToken = Cookies.get('RentVilla.Cookie_AT')
-    axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
+    // const accessToken = Cookies.get('RentVilla.Cookie_AT')
+    // axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
+
 
     const handleSubmit = (e) => {
-        e.preventDefault();
+        // e.preventDefault();
         if (attributeTypeId) {
-            console.log(attributeTypeId, description, isActive)
             axios.post('http://localhost:5006/api/Attributes/Add', { attributeTypeId, description, isActive })
                 .then(response => {
-                    console.log(response);
                     onModalClose();
                 })
                 .catch(error => {
@@ -48,13 +48,13 @@ const NewAttributeModal = ({ attributeTypeId, onModalClose }) => {
                                 <div className="mb-3 row">
                                     <label htmlFor="inputDescription" className="col-sm-2 col-form-label">Description</label>
                                     <div className="col-sm-10">
-                                        <input type="text" className="form-control" id="inputDescription" value={description} onChange={handleDescriptionChange} />
+                                        <input autoFocus type="text" className="form-control" id="inputDescription" value={description} onChange={handleDescriptionChange} />
                                     </div>
                                 </div>
                                 <div className="mb-3 row">
                                     <label htmlFor="flexSwitchCheckChecked" className="col-sm-2 form-check-label">Is Active</label>
                                     <div className="form-check form-switch col-sm-9 ps-5 ms-3">
-                                        <input className="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" value={isActive} onChange={handleIsActiveChange} />
+                                        <input className="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" checked value={isActive} onChange={handleIsActiveChange} />
                                     </div>
                                 </div>
                                 <div className="modal-footer">

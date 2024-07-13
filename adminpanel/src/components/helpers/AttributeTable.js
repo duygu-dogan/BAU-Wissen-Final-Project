@@ -49,12 +49,12 @@ const AttributeTable = ({ rows }) => {
                 <table className='table' aria-label="custom pagination table">
                     <thead>
                         <tr className='row justify-content-center text-center align-items-center'>
-                            <th className='col-1 '>NO</th>
-                            <th className='col-4'>ID</th>
-                            <th className='col-2'>TYPE</th>
-                            <th className='col-2'>DESCRIPTION</th>
-                            <th className='col-1'>ISACTIVE</th>
-                            <th className='col-2'>#</th>
+                            <th className='col-1 ps-5'>NO</th>
+                            {/* <th className='col-4'>ID</th> */}
+                            <th className='col-3 ps-5'>TYPE</th>
+                            <th className='col-3'>DESCRIPTION</th>
+                            <th className='col-2'>ISACTIVE</th>
+                            <th className='col-3'>#</th>
                         </tr>
                     </thead>
 
@@ -63,12 +63,12 @@ const AttributeTable = ({ rows }) => {
                             ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                             : rows
                         ).map((row, index) => (
-                            <tr key={row.id} className='row justify-content-center text-center '>
-                                <th className='col-1'>{index + 1}</th>
-                                <td className='col-4'>{row.id}</td>
-                                <td className='col-2'>{row.name}</td>
-                                <td className='col-2'>{row.description}</td>
-                                <td className='col-1'>
+                            <tr key={row.id} className='row justify-content-center text-center'>
+                                <th className='col-1 ps-5'>{index + 1}</th>
+                                {/* <td className='col-4'>{row.id}</td> */}
+                                <td className='col-3 ps-5'>{row.name}</td>
+                                <td className='col-3'>{row.description}</td>
+                                <td className='col-2'>
                                     <div className="form-check form-switch d-flex justify-content-center">
                                         <input
                                             className="form-check-input"
@@ -78,7 +78,7 @@ const AttributeTable = ({ rows }) => {
                                             onChange={() => handleSwitchChange(row.isactive)}
                                         />
                                     </div></td>
-                                <td className='col-2' >
+                                <td className='col-3' >
                                     <div className='d-flex justify-content-center'>
                                         <div>
                                             <button style={{ borderRadius: "3px" }} className='btn btn-warning btn-sm me-2'><FontAwesomeIcon icon={faPenToSquare} /></button>

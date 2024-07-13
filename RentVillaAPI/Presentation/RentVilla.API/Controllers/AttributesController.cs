@@ -66,8 +66,8 @@ namespace RentVilla.API.Controllers
         }
         [HttpGet]
         [ActionName("GetDeletedTypes")]
-        [Authorize(AuthenticationSchemes = "Admin")]
-        [AuthorizeDefinition(Menu = AuthorizeDefinitionConsts.Attributes, Definition = "Gets deleted attribute types", ActionType = ActionTypes.Reading)]
+        //[Authorize(AuthenticationSchemes = "Admin")]
+        //[AuthorizeDefinition(Menu = AuthorizeDefinitionConsts.Attributes, Definition = "Gets deleted attribute types", ActionType = ActionTypes.Reading)]
         public IActionResult GetDeletedAttributeTypes()
         {
             var models = _attributeTypeReadRepository.GetDeletedAttributeTypes();
@@ -75,8 +75,8 @@ namespace RentVilla.API.Controllers
         }
         [HttpPost]
         [ActionName("AddType")]
-        [Authorize(AuthenticationSchemes = "Admin")]
-        [AuthorizeDefinition(Menu = AuthorizeDefinitionConsts.Attributes, Definition = "Creates new attribute type", ActionType = ActionTypes.Writing)]
+        //[Authorize(AuthenticationSchemes = "Admin")]
+        //[AuthorizeDefinition(Menu = AuthorizeDefinitionConsts.Attributes, Definition = "Creates new attribute type", ActionType = ActionTypes.Writing)]
         public async Task<IActionResult> AddAttributeTypeAsync(string name)
         {
             var AttributeType = await _attributeTypeWriteRepository.AddAsync(new AttributeType { Name = name });
@@ -85,8 +85,8 @@ namespace RentVilla.API.Controllers
         }
         [HttpPut]
         [ActionName("UpdateType")]
-        [Authorize(AuthenticationSchemes = "Admin")]
-        [AuthorizeDefinition(Menu = AuthorizeDefinitionConsts.Attributes, Definition = "Updates given attribute type", ActionType = ActionTypes.Updating)]
+        //[Authorize(AuthenticationSchemes = "Admin")]
+        //[AuthorizeDefinition(Menu = AuthorizeDefinitionConsts.Attributes, Definition = "Updates given attribute type", ActionType = ActionTypes.Updating)]
         public async Task<IActionResult> Update(AttributeTypeUpdateVM model)
         {
             var attributeType = await _attributeTypeReadRepository.GetByIdAsync(model.Id);
@@ -96,8 +96,8 @@ namespace RentVilla.API.Controllers
         }
         [HttpPut]
         [ActionName("SoftDeleteType")]
-        [Authorize(AuthenticationSchemes = "Admin")]
-        [AuthorizeDefinition(Menu = AuthorizeDefinitionConsts.Attributes, Definition = "Updates attribute type's isDeleted status", ActionType = ActionTypes.Updating)]
+        //[Authorize(AuthenticationSchemes = "Admin")]
+        //[AuthorizeDefinition(Menu = AuthorizeDefinitionConsts.Attributes, Definition = "Updates attribute type's isDeleted status", ActionType = ActionTypes.Updating)]
         public async Task<IActionResult> SoftDeleteAttributeTypeAsync(string id)
         {
             var attributType = await _attributeTypeReadRepository.GetByIdAsync(id);
@@ -107,8 +107,8 @@ namespace RentVilla.API.Controllers
         }
         [HttpDelete]
         [ActionName("DeleteType")]
-        [Authorize(AuthenticationSchemes = "Admin")]
-        [AuthorizeDefinition(Menu = AuthorizeDefinitionConsts.Attributes, Definition = "Deletes attribute type", ActionType = ActionTypes.Deleting)]
+        //[Authorize(AuthenticationSchemes = "Admin")]
+        //[AuthorizeDefinition(Menu = AuthorizeDefinitionConsts.Attributes, Definition = "Deletes attribute type", ActionType = ActionTypes.Deleting)]
         public async Task<IActionResult> DeleteAttributeTypeAsync(string id)
         {
             var attributType = _attributeTypeReadRepository.AppDbContext.Include(at => at.Attributes).Where(at => at.Id == Guid.Parse(id)).FirstOrDefault();
@@ -155,8 +155,8 @@ namespace RentVilla.API.Controllers
         }
         [HttpPost]
         [ActionName("Add")]
-        [Authorize(AuthenticationSchemes = "Admin")]
-        [AuthorizeDefinition(Menu = AuthorizeDefinitionConsts.Attributes, Definition = "Creates new attribute", ActionType = ActionTypes.Writing)]
+        //[Authorize(AuthenticationSchemes = "Admin")]
+        //[AuthorizeDefinition(Menu = AuthorizeDefinitionConsts.Attributes, Definition = "Creates new attribute", ActionType = ActionTypes.Writing)]
         public async Task<IActionResult> AddAttributeAsync(AttributeCreateVM model)
         {
                 await _attributeWriteRepository.AddAsync(new Attributes
@@ -169,8 +169,8 @@ namespace RentVilla.API.Controllers
                 return Ok(model);
         }
         [HttpPut]
-        [Authorize(AuthenticationSchemes = "Admin")]
-        [AuthorizeDefinition(Menu = AuthorizeDefinitionConsts.Attributes, Definition = "Updates given attribute", ActionType = ActionTypes.Updating)]
+        //[Authorize(AuthenticationSchemes = "Admin")]
+        //[AuthorizeDefinition(Menu = AuthorizeDefinitionConsts.Attributes, Definition = "Updates given attribute", ActionType = ActionTypes.Updating)]
         public async Task<IActionResult> Update(AttributeUpdateVM model)
         {
             Attributes attributes = await _attributeReadRepository.GetByIdAsync(model.Id);
@@ -180,8 +180,8 @@ namespace RentVilla.API.Controllers
             return Ok();
         }
         [HttpDelete]
-        [Authorize(AuthenticationSchemes = "Admin")]
-        [AuthorizeDefinition(Menu = AuthorizeDefinitionConsts.Attributes, Definition = "Deletes given attribute", ActionType = ActionTypes.Deleting)]
+        //[Authorize(AuthenticationSchemes = "Admin")]
+        //[AuthorizeDefinition(Menu = AuthorizeDefinitionConsts.Attributes, Definition = "Deletes given attribute", ActionType = ActionTypes.Deleting)]
         public async Task<IActionResult> Delete(string id)
         {
             await _attributeWriteRepository.DeleteAsync(id);

@@ -9,16 +9,15 @@ const NewAttributeTypeModal = ({ onModalClose }) => {
     const [name, setName] = useState('');
     const handleNameChange = (e) => {
         setName(e.target.value);
-        console.log(name)
     }
-    const accessToken = Cookies.get('RentVilla.Cookie_AT')
-    axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
+    // const accessToken = Cookies.get('RentVilla.Cookie_AT')
+    // axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
+
     const handleSubmit = (e) => {
         e.preventDefault();
         if (name) {
             axios.post(`http://localhost:5006/api/attributes/addtype?name=${name}`)
                 .then(response => {
-                    console.log(response);
                     onModalClose();
                 })
                 .catch(error => {
