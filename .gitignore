@@ -402,3 +402,5 @@ RentVillaAPI/Presentation/RentVilla.API/appsettings.json
 RentVillaAPI/Presentation/RentVilla.API/Properties/launchSettings.json
 RentVillaAPI/Presentation/RentVilla.API/appsettings.json
 RentVillaAPI/Presentation/RentVilla.API/appsettings.json
+*.json
+RentVillaAPI/Presentation/RentVilla.API/appsettings.Development.json

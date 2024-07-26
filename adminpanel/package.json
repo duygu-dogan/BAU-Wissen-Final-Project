@@ -4,6 +4,7 @@
   "private": true,
   "homepage": "http://localhost:5161/admin",
   "dependencies": {
+    "@azure/storage-blob": "^12.23.0",
     "@coreui/coreui": "^4.3.2",
     "@coreui/icons": "^3.0.1",
     "@coreui/icons-react": "^2.2.1",
